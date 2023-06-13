@@ -1,4 +1,3 @@
-// index.js
 import getBehavior from './behavior'
 import yuvBehavior from './yuvBehavior'
 
@@ -13,7 +12,7 @@ Component({
     frameX: 0,
     frameY: 0,
     frameWidth: 0,
-    frameHeight: 0
+    frameHeight: 0,
   },
   lifetimes: {
     detached() {
@@ -74,8 +73,7 @@ Component({
           frameShow: false,
         })
       })
-      // this.addOSDMarker('dh')
-      this.addOSDMarker('jz')
+      this.addOSDMarker()
     },
     render(frame) {
       this.renderGL(frame)
@@ -92,13 +90,12 @@ Component({
       this.renderer.render(this.scene, this.camera)
       this.renderer.state.setCullFace(this.THREE.CullFaceNone)
     },
-    addOSDMarker(fileName) {
-      // if (this.markerId) return
+    addOSDMarker() {
+      if (this.markerId) return
       const fs = wx.getFileSystemManager()
-      const filePath = `${wx.env.USER_DATA_PATH}/osd-${fileName}.jpg`
-
+      const filePath = `${wx.env.USER_DATA_PATH}/osd-ar.jpg`
       wx.compressImage({
-        src: `./assets/${fileName}.png`, 
+        src: './assets/jz.jpg', 
         quality: 100,
         success: (res) => {
           fs.saveFile({
@@ -118,10 +115,13 @@ Component({
         content: '崇宁镇老爷庙是渭华起义发祥地，想听听渭华起义的更多历史吗?',
         success (res) {
           if (res.confirm) {
-            const innerAudioContext = wx.createInnerAudioContext()
-            innerAudioContext.autoplay = true
-            innerAudioContext.src = 'https://tqai-76286.gzc.vod.tencent-cloud.com/3024/bc269d073a33bed22a9070211a6b2850.mp3'
+            const backgroundAudioManager = wx.getBackgroundAudioManager()
+            backgroundAudioManager.title = '渭华起义'
+            backgroundAudioManager.src = 'https://tqai-76286.gzc.vod.tencent-cloud.com/3024/bc269d073a33bed22a9070211a6b2850.mp3'
           } else if (res.cancel) {
+            wx.navigateTo({
+              url: '/pages/webview/webview'
+            });
           }
         }
       })

@@ -1,0 +1,4 @@
+<!--webview.wxml-->
+<view class="container log-list">
+  <web-view src="https://www.baidu.com"></web-view>
+</view>
